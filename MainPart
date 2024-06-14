@@ -1,0 +1,36 @@
+import json
+
+try:
+    # Load JSON data from file
+    with open('output.json', 'r') as f:
+        data = json.load(f)
+
+    if 'conversations' in data and isinstance(data['conversations'], list):
+        with open('output.txt', 'w') as output_file:
+            for conversation in data['conversations']:
+                started_at = conversation.get("started_at", "started at not found")
+                from_number = conversation.get("from_number", "from number not found")
+                to_number = conversation.get("to_number", "to number not found")
+                total_duration = conversation.get("total_duration", "total duration not found")
+                i_d = conversation.get("id", "ID not found")
+                poly_duration = conversation.get ("poly_duration", "duration not found")
+                handoff_destination = conversation.get("handoff_destination", "destination not found")
+
+
+
+
+                metrics = conversation.get("metrics", {})
+                QA_TOPIC = metrics.get("QA_TOPIC", "topic reason not found")
+                handoff = conversation.get("handoff", "handoff not found")
+
+                #if polyai_duration != 38:
+                    #output_file.write(f"ID: {i_d}, Started at: {started_at}, From number: {from_number}, To number: {to_number}, Total duration: {total_duration}, QA Topic: {QA_TOPIC}, Poly Duration {polyai_duration}\n")
+
+                output_file.write(f"ID: {i_d}, Started at: {started_at}, From number: {from_number},Total Duration: {total_duration}, Handoff Reason: {handoff},Handoff Destination: {handoff_destination}, {QA_TOPIC}\n")
+    else:
+        with open('output.txt', 'w') as output_file:
+            output_file.write("The 'conversations' key is not present or is not a list.\n")
+
+except Exception as e:
+    # Print out any exceptions that occur
+    print(f"An error occurred: {e}")
